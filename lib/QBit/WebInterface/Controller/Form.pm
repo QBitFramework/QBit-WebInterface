@@ -58,6 +58,16 @@ sub get_field {
     return $_[0]->{'__FIELDS_HS__'}->{$_[1]}[0];
 }
 
+sub set_field_error {
+    my ($self, $field_name, $error) = @_;
+
+    throw gettext('Error class must be Exception descendant.')
+      unless blessed($error) && $error->isa('Exception');
+
+    $self->{'__FIELDS_ERROR__'}{$field_name} = $error;
+    return FALSE;
+}
+
 sub get_field_names {
     my ($self) = @_;
 
@@ -96,7 +106,7 @@ sub process {
                     $field->process($self->controller);
                 }
                 catch Exception::Form with {
-                    $self->{'__FIELDS_ERROR__'}{$field->{'name'}} = shift;
+                    $self->set_field_error($field->{'name'}, shift);
                 };
             }
 
