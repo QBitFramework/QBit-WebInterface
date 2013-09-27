@@ -15,7 +15,7 @@ sub init {
     $self->SUPER::init();
     weaken($self->{'form'});
 
-    ($self->{items_key}, $self->{items_label}) = each(%{$self->{items_key} || {'value' => 'label'}});
+    ($self->{items_key}, $self->{items_label}) = %{$self->{items_key} || {'value' => 'label'}};
 }
 
 sub is_hidden {0}
