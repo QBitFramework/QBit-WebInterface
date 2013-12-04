@@ -184,6 +184,9 @@ sub finish_form_html {
 sub as_html {
     my ($self) = @_;
 
+    $self->restore_field_values_from_stash()
+      if ($self->{'keep_values_on_success'});
+
     my $html = $self->start_form_html();
     $html .= $_->as_html() foreach grep {!$_->is_hidden()} @{$self->{'__FIELDS__'}};
     $html .= $self->finish_form_html();
@@ -202,6 +205,13 @@ sub get_stash_form_name {
     return $stash_name;
 }
 
+sub restore_field_values_from_stash {
+    my ($self) = @_;
+
+    $_->{'value'} //= $self->{'controller'}->stash_delete($self->get_stash_form_name($_->{'name'}))
+      foreach grep {$_->{'name'} && $_->{'type'} ne 'hidden'} @{$self->get_fields()};
+}
+
 sub _on_complete {
     my ($self, $controller) = @_;
 
@@ -209,6 +219,10 @@ sub _on_complete {
         my $stash_name = $self->get_stash_form_name('complete_message');
 
         $controller->stash_set($stash_name, $self->{complete_message});
+    }
+    if ($self->{'keep_values_on_success'}) {
+        $controller->stash_set($self->get_stash_form_name($_->{'name'}), $_->{'value'})
+          foreach grep {$_->{'name'}} @{$self->get_fields()};
     }
 
     my $retpath = $controller->request->param('retpath');
