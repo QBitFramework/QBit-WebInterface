@@ -14,7 +14,7 @@ __PACKAGE__->abstract_methods(
     qw(
       http_header
       method
-      uri
+      _uri
       scheme
       server_name
       server_port
@@ -78,6 +78,43 @@ sub url {
     return $url;
 }
 
+sub uri {
+    my ($self) = @_;
+
+    $self->{__URI__} ||= $self->_uri();
+
+    return $self->{__URI__};
+}
+
+sub store_data {
+    my ($self) = @_;
+
+    $self->_parse_params() unless exists($self->{'__PARAMS__'});
+
+    return {
+        uri    => $self->uri,
+        params => $self->{'__PARAMS__'},
+    };
+}
+
+sub retrive_data {
+    my ($self, $data) = @_;
+
+    throw gettext('Invalid data to retrive request')
+      unless ref($data) eq 'HASH' && defined($data->{'params'}) && defined($data->{'uri'});
+
+    $self->{'__PARAMS__'} = $data->{'params'};
+    $self->{'__URI__'}    = $data->{'uri'};
+
+    return FALSE;
+}
+
+sub parse_query_string {
+    my ($self, $query_string) = @_;
+
+    return $self->_parse_pairs([$self->_parse_query_string($query_string)]);
+}
+
 sub _parse_params {
     my ($self) = @_;
 
@@ -86,7 +123,7 @@ sub _parse_params {
     my @pairs;
 
     if ($self->method eq 'GET' || $self->method eq 'HEAD') {
-        push(@pairs, map {[split('=', $_, 2)]} split('&', $self->query_string));
+        push(@pairs, $self->_parse_query_string($self->query_string));
     } elsif ($self->method eq 'POST') {
         my ($buffer, $tmp, $size) = ('', '', 0);
         while (my $cnt = $self->_read_from_stdin(\$tmp, 1024 * 1024)) {
@@ -121,13 +158,26 @@ sub _parse_params {
                 }
             }
         } else {
-            push(@pairs, map {[split('=', $_, 2)]} split('&', $buffer));
+            push(@pairs, $self->_parse_query_string($buffer));
         }
     } else {
         throw Exception::Request::UnknownMethod gettext('Unknown method %s', $self->method);
     }
 
-    foreach (@pairs) {
+    $self->{'__PARAMS__'} = $self->_parse_pairs(\@pairs);
+}
+
+sub _parse_query_string {
+    my ($self, $query_string) = @_;
+
+    return map {[split('=', $_, 2)]} split('&', $query_string);
+}
+
+sub _parse_pairs {
+    my ($self, $pairs) = @_;
+
+    my %params;
+    foreach (@$pairs) {
         my ($pname, $pvalue) = @$_;
 
         next unless defined($pname);
@@ -135,10 +185,12 @@ sub _parse_params {
         $self->_unescape(\$pname);
         $self->_unescape(\$pvalue) if defined($pvalue) && !ref($pvalue);
 
-        $self->{'__PARAMS__'}{$pname} = []
-          unless exists($self->{'__PARAMS__'}{$pname});
-        push(@{$self->{'__PARAMS__'}{$pname}}, $pvalue);
+        $params{$pname} = []
+          unless exists($params{$pname});
+        push(@{$params{$pname}}, $pvalue);
     }
+
+    return \%params;
 }
 
 sub _parse_cookies {
