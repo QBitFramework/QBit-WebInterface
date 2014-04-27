@@ -17,8 +17,11 @@ sub method {shift->{'method'}}
 sub uri {
     my ($self) = @_;
 
-    my $result = "/$self->{'path'}/$self->{'cmd'}";
+    my $result = "/$self->{'path'}";
+    $result .= "/$self->{'cmd'}" if defined($self->{'cmd'});
     $result .= '?' . $self->{'query'} if defined($self->{'query'});
+    
+    return $result;
 }
 
 sub scheme {shift->{'scheme'}}
