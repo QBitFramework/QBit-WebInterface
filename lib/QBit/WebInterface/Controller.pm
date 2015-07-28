@@ -148,7 +148,7 @@ sub _get_url_absolute {
 
     if ($url =~ /\/\//) {
         my $my_host = $self->request->server_name;
-        return $self->denid if $url =~ /^(https?:)?\/\/(?!\Q$my_host\E)/i;
+        return $self->denied if $url =~ /^(https?:)?\/\/(?!\Q$my_host\E)/i;
     } else {
         $url = $self->request->url(no_uri => 1) . $url unless $url =~ /\/\//;
     }
