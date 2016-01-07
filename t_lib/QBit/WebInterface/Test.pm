@@ -34,7 +34,7 @@ sub get_response {
 
 sub get_cmd {
     my ($self) = @_;
-
+    
     return ($self->request->{'path'}, $self->request->{'cmd'});
 }
 
