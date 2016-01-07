@@ -1,3 +1,13 @@
+#TODO:
+# 1) http://mojolicious.org/perldoc/Mojolicious/Guides/Routing#Restrictive-placeholders
+# 2) сделать url_for
+# 3) сделать верхний уровень, чтобы не писать лишнего, аналог under
+# 4) formats для отдачи файлов
+# 5) callback для метода to
+# 6) вебсокет посмотреть
+# 7) Кэш
+# 8) в Application (pre_run) не верно определяется ApplicationPath, если лежит в t_lib
+
 package Exception::Routing;
 
 use base qw(Exception);
