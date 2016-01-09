@@ -108,7 +108,7 @@ sub import {
 
     {
         no strict 'refs';
-        foreach my $method (qw(get_option request response)) {
+        foreach my $method (qw(get_option request response routing)) {
             *{"${package}::${method}"} = sub {shift->app->$method(@_)};
         }
     }
