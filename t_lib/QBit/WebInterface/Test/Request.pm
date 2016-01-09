@@ -4,8 +4,6 @@ use qbit;
 
 use base qw(QBit::WebInterface::Request);
 
-__PACKAGE__->mk_accessors(qw(r));
-
 sub http_header {
     my ($self, $name) = @_;
 
@@ -35,5 +33,11 @@ sub server_port {0}
 sub remote_addr {'127.0.0.1'}
 
 sub query_string {shift->{'query'}}
+
+sub _read_from_stdin {
+    my ($self, $buffer_ref, $size) = @_;
+
+    return read($self->{'__STDIN__'}, $$buffer_ref, $size);
+}
 
 TRUE;

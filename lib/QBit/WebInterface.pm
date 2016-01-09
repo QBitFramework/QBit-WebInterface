@@ -109,21 +109,7 @@ sub build_response {
             $self->response->data(undef);
         }
         catch {
-            if (my $dir = $self->get_option('error_dump_dir')) {
-                require File::Path;
-                File::Path::make_path($dir);
-                writefile("$dir/dump_" . format_date(curdate(), '%Y%m%d_%H%M%S') . "${$}.html",
-                    $self->_exception2html(shift));
-                $self->response->status(500);
-                $self->response->data(undef);
-            } else {
-                if (($self->request->http_header('Accept') || '') =~ /(application\/json|text\/javascript)/) {
-                    $self->response->content_type("$1; charset=UTF-8");
-                    $self->response->data(to_json({error => shift->message()}));
-                } else {
-                    $self->response->data($self->_exception2html(shift));
-                }
-            }
+            $self->_catch_internal_server_error(@_);
         };
     } else {
         $self->response->status(404);
@@ -193,6 +179,29 @@ sub _escape_filename {
     $filename =~ s{\n}{}g;
 
     return $filename;
+}
+
+sub _catch_internal_server_error {
+    my ($self, $exception) = @_;
+
+    if (my $dir = $self->get_option('error_dump_dir')) {
+        require File::Path;
+        File::Path::make_path($dir);
+        writefile("$dir/dump_" . format_date(curdate(), '%Y%m%d_%H%M%S') . "${$}.html",
+            $self->_exception2html($exception));
+        $self->response->status(500);
+        $self->response->data(undef);
+    } else {
+        $self->response->status(200);
+        if (($self->request->http_header('Accept') || '') =~ /(application\/json|text\/javascript)/) {
+            $self->response->content_type("$1; charset=UTF-8");
+            $self->response->data(
+                to_json({error => gettext('Internal Server Error: %s', $exception->message())})
+            );
+        } else {
+            $self->response->data($self->_exception2html($exception));
+        }
+    }
 }
 
 sub _exception2html {

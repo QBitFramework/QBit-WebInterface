@@ -13,14 +13,18 @@ sub get_response {
 
     $self->request(
         QBit::WebInterface::Test::Request->new(
-            path  => $path,
-            cmd   => $cmd,
-            query => join('&', map {uri_escape_utf8($_) . '=' . uri_escape_utf8($params->{$_})} keys(%{$params || {}})),
+            path => $path,
+            cmd  => $cmd,
+            query =>
+              join('&', map {uri_escape_utf8($_) . '=' . uri_escape_utf8($params->{$_})} sort keys(%{$params || {}})),
             method  => $opts{'method'}  || 'GET',
             headers => $opts{'headers'} || {},
             scheme  => $opts{'scheme'}  || 'http'
-        )
+          )
     );
+
+    open($self->request->{'__STDIN__'}, '<', \$opts{'stdin'}) || throw "Cannot open file in memory"
+      if defined($opts{'stdin'});
 
     $self->build_response();
 

@@ -116,8 +116,8 @@ sub _parse_params {
                         s/[\\\/]([^\\\/]+)$/$1/;
                     }
                     push(@pairs, [$header{'name'}, {filename => $header{'filename'}, content => $content}]);
-                } elsif ($header{name}) {
-                    push(@pairs, [$header{'name'}, $content]);
+                } elsif ($header{'name'}) {
+                    push(@pairs, [$header{'name'}, \$content]);
                 }
             }
         } else {
@@ -133,7 +133,7 @@ sub _parse_params {
         next unless defined($pname);
 
         $self->_unescape(\$pname);
-        $self->_unescape(\$pvalue) if defined($pvalue) && !ref($pvalue);
+        $self->_unescape(\$pvalue) if defined($pvalue) && ref($pvalue) ne 'HASH';
 
         $self->{'__PARAMS__'}{$pname} = []
           unless exists($self->{'__PARAMS__'}{$pname});
@@ -164,8 +164,12 @@ sub _parse_cookies {
 sub _unescape {
     my ($self, $str_ptr) = @_;
 
-    $$str_ptr =~ tr/+/ /;
-    $$str_ptr =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
+    if (ref($$str_ptr) eq 'SCALAR') {
+        $$str_ptr = $$$str_ptr;
+    } else {
+        $$str_ptr =~ tr/+/ /;
+        $$str_ptr =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
+    }
     utf8::decode($$str_ptr);
 }
 

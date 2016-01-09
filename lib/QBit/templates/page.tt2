@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    [% IF title.defined %]<title>[% page_title | html %]</title>[% END %]
+    [% IF page_title.defined %]<title>[% page_title | html %]</title>[% END %]
     <link href="/qbit/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="/qbit/css/qbit.css" rel="stylesheet">
     [% TRY; INCLUDE qbit/head.tt2; CATCH; ''; END %]

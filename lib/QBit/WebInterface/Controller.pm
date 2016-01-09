@@ -89,7 +89,11 @@ sub import {
 
     foreach my $cmd (@{$pkg_stash->{'__CMDS__'} || []}) {
         my ($name) =
-          grep {!ref($pkg_sym_table->{$_}) && $cmd->{'sub'} == \&{$pkg_sym_table->{$_}}}
+          grep {
+                !ref($pkg_sym_table->{$_})
+              && defined(&{$pkg_sym_table->{$_}})
+              && $cmd->{'sub'} == \&{$pkg_sym_table->{$_}}
+          }
           keys %$pkg_sym_table;
 
         $cmd->{'attrs'} = $pkg_stash->{'__CMD_ATTRS__'}{$cmd->{'package'}, $cmd->{'sub'}} || {};
@@ -144,7 +148,7 @@ sub _get_url_absolute {
 
     if ($url =~ /\/\//) {
         my $my_host = $self->request->server_name;
-        return $self->denid if $url =~ /^(https?:)?\/\/(?!\Q$my_host\E)/i;
+        return $self->denied if $url =~ /^(https?:)?\/\/(?!\Q$my_host\E)/i;
     } else {
         $url = $self->request->url(no_uri => 1) . $url unless $url =~ /\/\//;
     }
@@ -155,9 +159,12 @@ sub _get_url_absolute {
 sub redirect {
     my ($self, $cmd, %params) = @_;
 
-    my $path = delete($params{'path'});
+    my $path   = delete($params{'path'});
+    my $anchor = delete($params{'#anchor'});
 
     my $url = $self->app->make_cmd($cmd, $path, %params);
+
+    $url .= '#' . uri_escape($anchor) if defined($anchor);
 
     return $self->redirect2url($url);
 }
@@ -166,6 +173,12 @@ sub denied {
     my ($self) = @_;
 
     $self->response->status(403);
+}
+
+sub not_found {
+    my ($self) = @_;
+
+    $self->response->status(404);
 }
 
 sub as_text {
