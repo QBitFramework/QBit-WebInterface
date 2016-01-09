@@ -30,6 +30,8 @@ sub post {shift->_generate_route(POST => @_)}
 
 sub put {shift->_generate_route(PUT => @_)}
 
+sub patch {shift->_generate_route(PATCH => @_)}
+
 sub delete {shift->_generate_route(DELETE => @_)}
 
 sub options {shift->_generate_route(OPTIONS => @_)}
