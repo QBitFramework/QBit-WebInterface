@@ -1,7 +1,7 @@
 use FindBin qw($Bin);
 
 use lib "$Bin/../lib";
-use lib "$Bin/lib";
+use lib "$Bin/../t_lib";
 
 use Test::More;
 use Test::Deep;
@@ -11,6 +11,8 @@ use qbit;
 use TestWebInterface;
 
 my $wi = new_ok('TestWebInterface');
+
+$wi->pre_run;
 
 cmp_deeply(
     $wi->get_cmds(),
