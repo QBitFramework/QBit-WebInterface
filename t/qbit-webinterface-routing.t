@@ -35,32 +35,61 @@ sub get_request {
 
 my $r = QBit::WebInterface::Routing->new();
 
+my $error = FALSE;
+try {
+    $r->get('user');
+}
+catch {
+    $error = TRUE;
+
+    is(shift->message, gettext('Route must begin with "/"'), 'Corrected error');
+}
+finally {
+    ok($error, 'throw exception');
+};
+
 $r->get('/')->to(path => 'user', cmd => 'list')->name('user_defualt');
 
-$r->get('/user/list')->to(path => 'user', cmd => 'list')->name('user__list');
+$r->get('/user/without_last_slash')->to(path => 'user', cmd => 'without_last_slash')->name('user__without_last_slash');
+
+$r->get('/user/with_last_slash/')->to(path => 'user', cmd => 'with_last_slash')->name('user__with_last_slash');
 
 $r->post('/user/add')->to(path => 'user', cmd => 'add')->name('user__add');
 
-$r->any('/user/info')->name('user__info')->to('user#info');
+$r->any('/user/info**')->name('user__info')->to('user#info');
 
 $r->any([qw(POST PUT PATCH)] => '/user/edit')->name('user__edit')->to(path => 'user', cmd => 'edit');
 
-$r->get('/user/standart/:name')->to(path => 'user', cmd => 'standart_name')->name('user__standart_name');
+$r->get('/user/standart/:name:')->to(path => 'user', cmd => 'standart_name')->name('user__standart_name');
 
-$r->get('/user/relaxed/#name')->to(path => 'user', cmd => 'relaxed_name')->name('user__relaxed_name');
+$r->get('/user/relaxed/#name#')->to(path => 'user', cmd => 'relaxed_name')->name('user__relaxed_name');
 
-$r->get('/user/wildcard/*name')->to(path => 'user', cmd => 'wildcard_name')->name('user__wildcard_name');
+$r->get('/user/wildcard/*name*')->to(path => 'user', cmd => 'wildcard_name')->name('user__wildcard_name');
 
-$r->post('/user/:action/:id')->name('user__action')->to(path => 'user', cmd => 'action');
+$r->post('/user/:action:/:id:')->name('user__action')->to(path => 'user', cmd => 'action');
 
-$r->get('/user/:id')->name('user__profile')->to(path => 'user', cmd => 'profile')
-  ->conditions(id => qr/\A[1-9][0-9]*\z/);
-
-$r->get('/user/:id/settings')->name('user__settings')->to(path => 'user', cmd => 'settings')->conditions(
-    id => sub {
+$r->get('/user/:name:-:surname:')->to(
+    sub {
         my ($web_interface, $params) = @_;
 
-        return $params->{'id'} >= 1_000 && $params->{'id'} <= 1_500;
+        if ($params->{'name'} eq 'vasya') {
+            return ('user', 'name_surname_vasya');
+        } elsif ($params->{'name'} eq 'petya') {
+            return ('user', 'name_surname_petya');
+        } else {
+            return ('', '');
+        }
+    }
+)->name('user__name_surname');
+
+$r->get('/user/:id:')->name('user__profile')->to(path => 'user', cmd => 'profile')
+  ->conditions(id => qr/\A[1-9][0-9]*\z/);
+
+$r->get('/user/:id:/settings')->name('user__settings')->to(path => 'user', cmd => 'settings')->conditions(
+    id => sub {
+        my ($web_interface, $chek_value, $params) = @_;
+
+        return $chek_value >= 1_000 && $chek_value <= 1_500;
     }
 );
 
@@ -69,169 +98,204 @@ $r->get('/user/scheme')->conditions(scheme => qr/https/)->to(path => 'user', cmd
 $r->get('/user/mobile')->conditions(user_agent => qr/IEMobile/)->to(path => 'user', cmd => 'mobile')
   ->name('user__mobile');
 
+$r->put('/user/:login:')->conditions(login => [qw(bender)])->to('user#bender');
+
 cmp_deeply(
     $r->{'__ROUTES__'},
     {
-        '/user/list' => {
+        '/user/without_last_slash' => {
+            'name'       => 'user__without_last_slash',
+            'format'     => '/user/without_last_slash',
             'params'     => [],
-            'methods'    => 1,
             'route_path' => {
-                'cmd'  => 'list',
+                'cmd'  => 'without_last_slash',
                 'path' => 'user'
             },
-            'is_regexp' => 0,
-            'pattern'   => '\A\/user\/list\/\z',
-            'levels'    => 2,
-            'name'      => 'user__list'
+            'methods' => 1,
+            'pattern' => '\A\/user\/without_last_slash\z',
+            'levels'  => 2
+        },
+        '/user/:action:/:id:' => {
+            'format'     => '/user/%s/%s',
+            'name'       => 'user__action',
+            'route_path' => {
+                'path' => 'user',
+                'cmd'  => 'action'
+            },
+            'params'  => ['action', 'id'],
+            'pattern' => '\A\/user\/([^\/.]+)\/([^\/.]+)\z',
+            'methods' => 4,
+            'levels'  => 3
+        },
+        '/user/scheme' => {
+            'name'       => 'user__sheme',
+            'format'     => '/user/scheme',
+            'pattern'    => '\A\/user\/scheme\z',
+            'methods'    => 1,
+            'levels'     => 2,
+            'conditions' => {'scheme' => qr/https/},
+            'route_path' => {
+                'path' => 'user',
+                'cmd'  => 'scheme'
+            },
+            'params' => []
         },
         '/' => {
-            'name'       => 'user_defualt',
             'levels'     => 0,
-            'pattern'    => '\A\/\z',
-            'is_regexp'  => 0,
+            'format'     => '/',
+            'name'       => 'user_defualt',
+            'params'     => [],
             'route_path' => {
                 'path' => 'user',
                 'cmd'  => 'list'
             },
             'methods' => 1,
-            'params'  => []
+            'pattern' => '\A\/\z'
         },
-        '/user/:id' => {
-            'is_regexp'  => 1,
-            'pattern'    => '\A\/user\/([^\/.]+)\/\z',
+        '/user/:id:/settings' => {
+            'route_path' => {
+                'cmd'  => 'settings',
+                'path' => 'user'
+            },
             'params'     => ['id'],
-            'route_path' => {
-                'cmd'  => 'profile',
-                'path' => 'user'
-            },
             'methods'    => 1,
-            'conditions' => {'id' => qr/\A[1-9][0-9]*\z/},
-            'name'       => 'user__profile',
-            'levels'     => 2
-        },
-        '/user/info' => {
-            'params'     => [],
-            'route_path' => {
-                'cmd'  => 'info',
-                'path' => 'user'
-            },
-            'methods'   => 127,
-            'is_regexp' => 0,
-            'pattern'   => '\A\/user\/info\/\z',
-            'levels'    => 2,
-            'name'      => 'user__info'
+            'pattern'    => '\A\/user\/([^\/.]+)\/settings\z',
+            'format'     => '/user/%s/settings',
+            'name'       => 'user__settings',
+            'conditions' => {'id' => ignore()},
+            'levels'     => 3
         },
         '/user/mobile' => {
-            'is_regexp'  => 0,
-            'pattern'    => '\A\/user\/mobile\/\z',
+            'conditions' => {'user_agent' => qr/IEMobile/},
+            'levels'     => 2,
+            'pattern'    => '\A\/user\/mobile\z',
+            'methods'    => 1,
+            'name'       => 'user__mobile',
+            'format'     => '/user/mobile',
+            'route_path' => {
+                'cmd'  => 'mobile',
+                'path' => 'user'
+            },
+            'params' => []
+        },
+        '/user/relaxed/#name#' => {
             'route_path' => {
                 'path' => 'user',
-                'cmd'  => 'mobile'
+                'cmd'  => 'relaxed_name'
             },
-            'methods'    => 1,
-            'params'     => [],
-            'conditions' => {'user_agent' => qr/IEMobile/},
-            'name'       => 'user__mobile',
-            'levels'     => 2
-        },
-        '/user/:action/:id' => {
-            'params'     => ['action', 'id'],
-            'methods'    => 4,
-            'route_path' => {
-                'cmd'  => 'action',
-                'path' => 'user'
-            },
-            'pattern'   => '\A\/user\/([^\/.]+)\/([^\/.]+)\/\z',
-            'is_regexp' => 1,
-            'levels'    => 3,
-            'name'      => 'user__action'
-        },
-        '/user/standart/:name' => {
-            'name'       => 'user__standart_name',
-            'levels'     => 3,
-            'is_regexp'  => 1,
-            'pattern'    => '\A\/user\/standart\/([^\/.]+)\/\z',
-            'params'     => ['name'],
-            'methods'    => 1,
-            'route_path' => {
-                'cmd'  => 'standart_name',
-                'path' => 'user'
-            }
+            'params'  => ['name'],
+            'pattern' => '\A\/user\/relaxed\/([^\/]+)\z',
+            'methods' => 1,
+            'name'    => 'user__relaxed_name',
+            'format'  => '/user/relaxed/%s',
+            'levels'  => 3
         },
         '/user/add' => {
-            'is_regexp'  => 0,
-            'pattern'    => '\A\/user\/add\/\z',
-            'params'     => [],
+            'levels'     => 2,
+            'format'     => '/user/add',
+            'name'       => 'user__add',
             'route_path' => {
                 'cmd'  => 'add',
                 'path' => 'user'
             },
             'methods' => 4,
-            'name'    => 'user__add',
-            'levels'  => 2
+            'params'  => [],
+            'pattern' => '\A\/user\/add\z'
         },
-        '/user/scheme' => {
-            'conditions' => {'scheme' => qr/https/},
+        '/user/info**' => {
             'levels'     => 2,
-            'name'       => 'user__sheme',
-            'methods'    => 1,
             'route_path' => {
-                'path' => 'user',
-                'cmd'  => 'scheme'
-            },
-            'params'    => [],
-            'is_regexp' => 0,
-            'pattern'   => '\A\/user\/scheme\/\z'
-        },
-        '/user/wildcard/*name' => {
-            'methods'    => 1,
-            'route_path' => {
-                'cmd'  => 'wildcard_name',
+                'cmd'  => 'info',
                 'path' => 'user'
             },
-            'params'    => ['name'],
-            'pattern'   => '\A\/user\/wildcard\/(.+)\/\z',
-            'is_regexp' => 1,
-            'levels'    => 3,
-            'name'      => 'user__wildcard_name'
+            'methods' => 127,
+            'params'  => [],
+            'pattern' => '\A\/user\/info\*\z',
+            'name'    => 'user__info',
+            'format'  => '/user/info*'
         },
-        '/user/:id/settings' => {
-            'name'       => 'user__settings',
-            'levels'     => 3,
-            'conditions' => {'id' => ignore(),},
-            'is_regexp'  => 1,
-            'pattern'    => '\A\/user\/([^\/.]+)\/settings\/\z',
+        '/user/:id:' => {
+            'name'       => 'user__profile',
+            'format'     => '/user/%s',
+            'methods'    => 1,
+            'pattern'    => '\A\/user\/([^\/.]+)\z',
+            'levels'     => 2,
+            'conditions' => {'id' => qr/\A[1-9][0-9]*\z/},
             'params'     => ['id'],
             'route_path' => {
-                'cmd'  => 'settings',
+                'path' => 'user',
+                'cmd'  => 'profile'
+            }
+        },
+        '/user/standart/:name:' => {
+            'levels'     => 3,
+            'name'       => 'user__standart_name',
+            'format'     => '/user/standart/%s',
+            'methods'    => 1,
+            'route_path' => {
+                'cmd'  => 'standart_name',
                 'path' => 'user'
             },
-            'methods' => 1
+            'pattern' => '\A\/user\/standart\/([^\/.]+)\z',
+            'params'  => ['name']
+        },
+        '/user/wildcard/*name*' => {
+            'format'     => '/user/wildcard/%s',
+            'name'       => 'user__wildcard_name',
+            'params'     => ['name'],
+            'route_path' => {
+                'path' => 'user',
+                'cmd'  => 'wildcard_name'
+            },
+            'pattern' => '\A\/user\/wildcard\/(.+)\z',
+            'methods' => 1,
+            'levels'  => 3
+        },
+        '/user/with_last_slash/' => {
+            'levels'     => 2,
+            'route_path' => {
+                'cmd'  => 'with_last_slash',
+                'path' => 'user'
+            },
+            'methods' => 1,
+            'params'  => [],
+            'pattern' => '\A\/user\/with_last_slash\/\z',
+            'format'  => '/user/with_last_slash/',
+            'name'    => 'user__with_last_slash'
+        },
+        '/user/:login:' => {
+            'conditions' => {'login' => ['bender']},
+            'levels'     => 2,
+            'route_path' => {
+                'cmd'  => 'bender',
+                'path' => 'user'
+            },
+            'pattern' => '\A\/user\/([^\/.]+)\z',
+            'params'  => ['login'],
+            'methods' => 8,
+            'format'  => '/user/%s'
+        },
+        '/user/:name:-:surname:' => {
+            'levels'     => 2,
+            'name'       => 'user__name_surname',
+            'format'     => '/user/%s-%s',
+            'params'     => ['name', 'surname'],
+            'route_path' => ignore(),
+            'methods'    => 1,
+            'pattern'    => '\A\/user\/([^\/.]+)\-([^\/.]+)\z'
         },
         '/user/edit' => {
-            'params'     => [],
-            'methods'    => 28,
+            'levels'     => 2,
             'route_path' => {
                 'path' => 'user',
                 'cmd'  => 'edit'
             },
-            'pattern'   => '\A\/user\/edit\/\z',
-            'is_regexp' => 0,
-            'levels'    => 2,
-            'name'      => 'user__edit'
-        },
-        '/user/relaxed/#name' => {
-            'is_regexp'  => 1,
-            'pattern'    => '\A\/user\/relaxed\/([^\/]+)\/\z',
-            'route_path' => {
-                'path' => 'user',
-                'cmd'  => 'relaxed_name'
-            },
-            'methods' => 1,
-            'params'  => ['name'],
-            'name'    => 'user__relaxed_name',
-            'levels'  => 3
-        },
+            'pattern' => '\A\/user\/edit\z',
+            'methods' => 28,
+            'params'  => [],
+            'format'  => '/user/edit',
+            'name'    => 'user__edit'
+        }
     },
     'Routes'
 );
@@ -254,22 +318,42 @@ cmp_deeply([$wi->get_cmd()], ['', ''], 'POST "/" not found');
 $wi->request(
     get_request(
         path   => 'user',
-        cmd    => 'list',
+        cmd    => 'without_last_slash',
         params => {id => 1},
     )
 );
 
-cmp_deeply([$wi->get_cmd()], ['user', 'list'], 'GET "/user/list?id=1"');
+cmp_deeply([$wi->get_cmd()], ['user', 'without_last_slash'], 'GET "/user/without_last_slash?id=1"');
 
 $wi->request(
     get_request(
         path   => 'user',
-        cmd    => 'list/',
+        cmd    => 'without_last_slash/',
         params => {id => 1},
     )
 );
 
-cmp_deeply([$wi->get_cmd()], ['user', 'list'], 'GET "/user/list/?id=1"');
+cmp_deeply([$wi->get_cmd()], ['', ''], 'GET "/user/without_last_slash/?id=1"');
+
+$wi->request(
+    get_request(
+        path   => 'user',
+        cmd    => 'with_last_slash',
+        params => {id => 1},
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['', ''], 'GET "/user/with_last_slash?id=1"');
+
+$wi->request(
+    get_request(
+        path   => 'user',
+        cmd    => 'with_last_slash/',
+        params => {id => 1},
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['user', 'with_last_slash'], 'GET "/user/with_last_slash/?id=1"');
 
 $wi->request(
     get_request(
@@ -284,12 +368,12 @@ cmp_deeply([$wi->get_cmd()], ['user', 'add'], 'POST "/user/add"');
 $wi->request(
     get_request(
         path   => 'user',
-        cmd    => 'info',
+        cmd    => 'info*',
         method => 'HEAD',
     )
 );
 
-cmp_deeply([$wi->get_cmd()], ['user', 'info'], 'HEAD "/user/info"');
+cmp_deeply([$wi->get_cmd()], ['user', 'info'], 'HEAD "/user/info*"');
 
 $wi->request(
     get_request(
@@ -462,9 +546,57 @@ cmp_deeply([$wi->get_cmd()], ['user', 'action'], 'POST "/user/delete/2"');
 
 cmp_deeply($wi->get_option('url_params'), {action => 'delete', id => 2}, 'Check url params');
 
+$wi->request(
+    get_request(
+        path => 'user',
+        cmd  => 'vasya-pupkin',
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['user', 'name_surname_vasya'], 'GET "/user/vasya-pupkin"');
+
+cmp_deeply($wi->get_option('url_params'), {name => 'vasya', surname => 'pupkin'}, 'Check url params');
+
+$wi->request(
+    get_request(
+        path => 'user',
+        cmd  => 'petya-pupkin',
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['user', 'name_surname_petya'], 'GET "/user/petya-pupkin"');
+
+cmp_deeply($wi->get_option('url_params'), {name => 'petya', surname => 'pupkin'}, 'Check url params');
+
 #
 # conditions
 #
+
+# array
+
+$wi->request(
+    get_request(
+        path   => 'user',
+        cmd    => 'fry',
+        method => 'PUT',
+        params => {name => 'vasya'},
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['', ''], 'PUT "/user/fry" not found');
+
+$wi->request(
+    get_request(
+        path   => 'user',
+        cmd    => 'bender',
+        method => 'PUT',
+        params => {name => 'vasya'},
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['user', 'bender'], 'PUT "/user/bender"');
+
+cmp_deeply($wi->get_option('url_params'), {login => 'bender'}, 'Check url params');
 
 # regexp
 $wi->request(
@@ -552,5 +684,171 @@ $wi->request(
 );
 
 cmp_deeply([$wi->get_cmd()], ['user', 'mobile'], 'GET "/user/mobile"');
+
+#
+# url_for
+#
+
+is($r->url_for('user__edit'), '/user/edit', 'url_for "user__edit"');
+
+is(
+    $r->url_for('user__edit', {}, id => 1, fio => 'vasya pupkin'),
+    '/user/edit?fio=vasya%20pupkin&id=1',
+    'url_for "user__edit" with params'
+  );
+
+is($r->url_for('user__info'), '/user/info*', 'url_for "user__info"');
+
+is($r->url_for('user__name_surname', {name => 'vasya', surname => 'pupkin'},),
+    '/user/vasya-pupkin', 'url_for "user__name_surname"');
+
+#
+# strictly
+#
+
+my $r2 = QBit::WebInterface::Routing->new(strictly => FALSE);
+
+$r2->get('/user/without_last_slash')->to(path => 'user', cmd => 'without_last_slash')->name('user__without_last_slash');
+
+$r2->get('/user/with_last_slash/')->to(path => 'user', cmd => 'with_last_slash')->name('user__with_last_slash');
+
+cmp_deeply(
+    $r2->{'__ROUTES__'},
+    {
+        '/user/with_last_slash/' => {
+            'levels'     => 2,
+            'name'       => 'user__with_last_slash',
+            'format'     => '/user/with_last_slash/',
+            'route_path' => {
+                'cmd'  => 'with_last_slash',
+                'path' => 'user'
+            },
+            'methods' => 1,
+            'params'  => [],
+            'pattern' => '\A\/user\/with_last_slash\/\z'
+        },
+        '/user/without_last_slash' => {
+            'route_path' => {
+                'cmd'  => 'without_last_slash',
+                'path' => 'user'
+            },
+            'params'  => [],
+            'pattern' => '\A\/user\/without_last_slash\/\z',
+            'methods' => 1,
+            'format'  => '/user/without_last_slash/',
+            'name'    => 'user__without_last_slash',
+            'levels'  => 2
+        }
+    },
+    'Routes strictly => FALSE'
+);
+
+$wi->routing($r2);
+
+$wi->request(
+    get_request(
+        path   => 'user',
+        cmd    => 'without_last_slash',
+        params => {id => 1},
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['user', 'without_last_slash'], 'GET "/user/without_last_slash?id=1"');
+
+$wi->request(
+    get_request(
+        path   => 'user',
+        cmd    => 'without_last_slash/',
+        params => {id => 1},
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['user', 'without_last_slash'], 'GET "/user/without_last_slash/?id=1"');
+
+$wi->request(
+    get_request(
+        path   => 'user',
+        cmd    => 'with_last_slash',
+        params => {id => 1},
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['user', 'with_last_slash'], 'GET "/user/with_last_slash?id=1"');
+
+$wi->request(
+    get_request(
+        path   => 'user',
+        cmd    => 'with_last_slash/',
+        params => {id => 1},
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['user', 'with_last_slash'], 'GET "/user/with_last_slash/?id=1"');
+
+is($r2->url_for('user__without_last_slash'), '/user/without_last_slash/', 'url_for "user__without_last_slash"');
+
+is($r2->url_for('user__with_last_slash'), '/user/with_last_slash/', 'url_for "user__with_last_slash"');
+
+#
+# under
+#
+
+my $player = $r2->under('/player')->to('player#game')->conditions(server_name => sub {$_[1] eq 'Test'});
+
+$player->get('/settings')->to('#settings')->conditions(remote_addr => sub {$_[1] eq '127.0.0.1'});
+
+cmp_deeply(
+    $player->{'__ROUTES__'},
+    {
+        '/player/settings' => {
+            'methods'    => 1,
+            'params'     => [],
+            'conditions' => {
+                'remote_addr' => ignore(),
+                'server_name' => ignore(),
+            },
+            'pattern'    => '\A\/player\/settings\/\z',
+            'format'     => '/player/settings/',
+            'route_path' => ignore(),
+            'levels'     => 2
+        },
+        '/user/without_last_slash' => {
+            'params'     => [],
+            'name'       => 'user__without_last_slash',
+            'methods'    => 1,
+            'pattern'    => '\A\/user\/without_last_slash\/\z',
+            'route_path' => {
+                'cmd'  => 'without_last_slash',
+                'path' => 'user'
+            },
+            'format' => '/user/without_last_slash/',
+            'levels' => 2
+        },
+        '/user/with_last_slash/' => {
+            'name'       => 'user__with_last_slash',
+            'params'     => [],
+            'methods'    => 1,
+            'levels'     => 2,
+            'route_path' => {
+                'path' => 'user',
+                'cmd'  => 'with_last_slash'
+            },
+            'format'  => '/user/with_last_slash/',
+            'pattern' => '\A\/user\/with_last_slash\/\z'
+        }
+    },
+    'Routes player'
+);
+
+$wi->routing($r2);
+
+$wi->request(
+    get_request(
+        path => 'player',
+        cmd  => 'settings',
+    )
+);
+
+cmp_deeply([$wi->get_cmd()], ['player', 'settings'], 'GET "/player/settings"');
 
 done_testing;
