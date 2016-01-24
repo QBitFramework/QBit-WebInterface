@@ -12,10 +12,4 @@ __PACKAGE__->config_opts(
     MinimizeTemplate => TRUE,
 );
 
-sub get_cmd {
-    my ($self) = @_;
-
-    return defined($self->routing()) ? $self->routing->get_cmd($self) : $self->SUPER::get_cmd();
-}
-
 TRUE;

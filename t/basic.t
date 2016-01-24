@@ -12,8 +12,6 @@ use TestWebInterface;
 
 my $wi = new_ok('TestWebInterface');
 
-$wi->pre_run;
-
 cmp_deeply(
     $wi->get_cmds(),
     {
