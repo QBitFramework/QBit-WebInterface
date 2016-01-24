@@ -20,7 +20,7 @@ sub get_response {
             method  => $opts{'method'}  || 'GET',
             headers => $opts{'headers'} || {},
             scheme  => $opts{'scheme'}  || 'http'
-          )
+        )
     );
 
     open($self->request->{'__STDIN__'}, '<', \$opts{'stdin'}) || throw "Cannot open file in memory"
@@ -38,7 +38,7 @@ sub get_response {
 
 sub get_cmd {
     my ($self) = @_;
-    
+
     return ($self->request->{'path'}, $self->request->{'cmd'});
 }
 
