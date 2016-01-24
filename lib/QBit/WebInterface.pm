@@ -20,12 +20,6 @@ sub response {
     return defined($response) ? $self->{'__RESPONSE__'} = $response : $self->{'__RESPONSE__'};
 }
 
-sub routing {
-    my ($self, $routing) = @_;
-    
-    return defined($routing) ? $self->{'__ROUTING__'} = $routing : $self->{'__ROUTING__'};
-}
-
 sub get_cmds {
     my ($self) = @_;
 
