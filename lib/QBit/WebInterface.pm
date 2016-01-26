@@ -10,11 +10,13 @@ eval {require Exception::WebInterface::Controller::CSRF; require Exception::Requ
 
 sub request {
     my ($self, $request) = @_;
+
     return defined($request) ? $self->{'__REQUEST__'} = $request : $self->{'__REQUEST__'};
 }
 
 sub response {
     my ($self, $response) = @_;
+
     return defined($response) ? $self->{'__RESPONSE__'} = $response : $self->{'__RESPONSE__'};
 }
 
@@ -108,17 +110,18 @@ sub build_response {
     }
 
     my $ua = $self->request->http_header('User-Agent');
-    $self->response->headers->{'Pragma'} = ( $ua =~ /MSIE/ ) ? 'public' : 'no-cache';
+    $self->response->headers->{'Pragma'} = ($ua =~ /MSIE/) ? 'public' : 'no-cache';
 
-    $self->response->headers->{'Cache-Control'} = ( $ua =~ /MSIE/ )
+    $self->response->headers->{'Cache-Control'} =
+      ($ua =~ /MSIE/)
       ? 'must-revalidate, post-check=0, pre-check=0'
       : 'no-cache, no-store, max-age=0, must-revalidate';
 
-    my $tm = time();
-    my $zone =  (strftime("%z", localtime($tm)) + 0) / 100;
-    my $loc = setlocale( LC_TIME );
-    setlocale( LC_TIME, 'en_US.UTF-8' );
-    my $GMT = strftime("%a, %d %b %Y %H:%M:%S GMT", localtime($tm - $zone * 3600 ));
+    my $tm   = time();
+    my $zone = (strftime("%z", localtime($tm)) + 0) / 100;
+    my $loc  = setlocale(LC_TIME);
+    setlocale(LC_TIME, 'en_US.UTF-8');
+    my $GMT = strftime("%a, %d %b %Y %H:%M:%S GMT", localtime($tm - $zone * 3600));
     setlocale(LC_TIME, $loc);
 
     $self->response->headers->{'Expires'} = $GMT;
@@ -187,9 +190,7 @@ sub _catch_internal_server_error {
         $self->response->status(200);
         if (($self->request->http_header('Accept') || '') =~ /(application\/json|text\/javascript)/) {
             $self->response->content_type("$1; charset=UTF-8");
-            $self->response->data(
-                to_json({error => gettext('Internal Server Error: %s', $exception->message())})
-            );
+            $self->response->data(to_json({error => gettext('Internal Server Error: %s', $exception->message())}));
         } else {
             $self->response->data($self->_exception2html($exception));
         }
@@ -222,7 +223,7 @@ sub _exception2html {
     };
 
     my $html =
-        '<html>'
+        '<html>' 
       . '<head>'
       . '<meta http-equiv="content-type" content="text/html; charset=UTF-8">'
       . '<title>'
@@ -296,8 +297,8 @@ sub _exception2html {
       . '</table>'
       . '</div>'
 
-      . '<div style="background-color: #FFFACD; padding: 5px 10px; margin: 1px;">'
-      . '<h3>Backtrace:</h3>'
+      . '<div style="background-color: #FFFACD; padding: 5px 10px; margin: 1px;">' 
+      . '<h3>Backtrace:</h3>' 
       . join(
         '',
         map {
