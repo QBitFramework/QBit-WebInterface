@@ -1,3 +1,9 @@
+libqbit-webinterface-perl (0.023) raring; urgency=low
+
+  * fix path and added libcgi-pm-perl in depends
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Wed, 10 Feb 2016 23:27:21 +0300
+
 libqbit-webinterface-perl (0.022) raring; urgency=low
 
   * use t_lib
