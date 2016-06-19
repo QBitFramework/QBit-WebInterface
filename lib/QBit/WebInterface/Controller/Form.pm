@@ -127,7 +127,7 @@ sub process {
                     $self->{'save'}($self, $self->controller);
                 }
                 catch Exception::Form with {
-                    $self->{'__ERROR__'} = $@;
+                    $self->{'__ERROR__'} = shift;
                 };
             }
 
