@@ -1,0 +1,123 @@
+==================================================
+Changes from 2015-09-05 00:00:00 +0000 to present.
+==================================================
+
+------------------------------------------
+version 0.025 at 2016-09-04 20:40:44 +0000
+------------------------------------------
+
+  Change: 57b56cb8ab354080cd907b5049b82ad6df9cc7ba
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2016-09-05 00:39:30 +0000
+
+    Merge pull request #21 from Madskill/upload_to_cpan
+
+    upload to cpan 
+
+  Change: 98c4ee29e114de0e5c73f3116f95c505ed2ac2e6
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-09-04 23:38:06 +0000
+
+    upload to cpan 
+
+------------------------------------------
+version 0.024 at 2016-07-03 15:31:30 +0000
+------------------------------------------
+
+  Change: 91993bb2b178fb9ef2063b753d39b7472b884be4
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-07-03 18:31:30 +0000
+
+    Version 0.024 
+
+  Change: aa6b59f988751455d047f26c8c2f70d94d956dd8
+  Author: Sergei Svistunov <sergei-svistunov@yandex.ru>
+  Date : 2016-06-27 23:48:59 +0000
+
+    Merge pull request #20 from Madskill/fix_exception
+
+    fix exception 
+
+  Change: 57abf1f39f4b7586636e9b37036f32986636ac4b
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-06-27 22:13:02 +0000
+
+    shift -> $_[0] 
+
+  Change: 62eb9f7548230891376006e5dd9eee71c89dacaf
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-06-20 00:03:32 +0000
+
+    fix exception 
+
+------------------------------------------
+version 0.023 at 2016-02-10 20:27:48 +0000
+------------------------------------------
+
+  Change: 565593ddae4403fe5f1f2261901b9fe2ed920590
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-02-10 23:27:48 +0000
+
+    Version 0.023 
+
+  Change: 551bb660ef370664b771462ee7e3b4a797f037ec
+  Author: Sergei Svistunov <sergei-svistunov@yandex.ru>
+  Date : 2016-02-10 20:00:37 +0000
+
+    Merge pull request #19 from Madskill/use_t_lib_new
+
+    Use t lib new 
+
+  Change: bfda3f63fac61316b05f129746e391ac17c106a1
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-02-07 13:59:08 +0000
+
+    Merge remote-tracking branch 'upstream/master' into use_t_lib_new 
+
+  Change: 0a55b7b7eefc7973e5bf4e84eb080767408152a8
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-02-07 13:58:05 +0000
+
+    fix path and added libcgi-pm-perl in depends 
+
+------------------------------------------
+version 0.022 at 2016-01-26 20:07:16 +0000
+------------------------------------------
+
+  Change: b8656b044e4a9836119fbdb20be347b7ab19d7eb
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-01-26 23:07:16 +0000
+
+    Version 0.022 
+
+  Change: 1ef8d1f4945c49b9fc25927c329e1da6357fb213
+  Author: Sergei Svistunov <sergei-svistunov@yandex.ru>
+  Date : 2016-01-26 19:17:28 +0000
+
+    Merge pull request #18 from Madskill/use_t_lib_new
+
+    use t_lib 
+
+  Change: 67c07881b28d7e225b9d7ae888f57f5e48ef2c93
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-01-24 19:01:36 +0000
+
+    use t_lib 
+
+  Change: 894ade99233747a3a00b244cce3890752c35941f
+  Author: Sergei Svistunov <sergei-svistunov@yandex.ru>
+  Date : 2015-07-28 14:36:14 +0000
+
+    Merge pull request #15 from Madskill/fix_typo
+
+    fix typo 
+
+  Change: d089df0ea8265af177c18fb3cfde7c3388b406a6
+  Author: blizzard <blizzard@yandex-team.ru>
+  Date : 2015-07-28 14:33:55 +0000
+
+    fix typo 
+
+=================================================
+Plus 21 releases after 2015-09-05 00:00:00 +0000.
+=================================================
