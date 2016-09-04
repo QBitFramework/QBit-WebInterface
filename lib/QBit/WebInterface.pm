@@ -336,3 +336,33 @@ sub _exception2html {
 }
 
 TRUE;
+
+__END__
+
+=encoding utf8
+
+=head1 Name
+ 
+QBit::WebInterface - Base class for creating web interface.
+
+=head1 GitHub
+
+https://github.com/QBitFramework/QBit-WebInterface
+
+=head1 Install
+
+=over
+
+=item *
+
+cpanm QBit::WebInterface
+
+=item *
+
+apt-get install libqbit-webinterface-perl (http://perlhub.ru/)
+
+=back
+
+For more information. please, see code.
+
+=cut
