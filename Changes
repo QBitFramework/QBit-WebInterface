@@ -1,10 +1,34 @@
 ==================================================
-Changes from 2015-09-05 00:00:00 +0000 to present.
+Changes from 2015-10-09 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.025 at 2016-09-04 20:40:44 +0000
+version 0.026 at 2016-10-08 19:39:00 +0000
 ------------------------------------------
+
+  Change: 9467a05427c37e0fb1bcc004d0b7e20672bb44e8
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2016-10-08 23:37:17 +0000
+
+    Merge pull request #22 from Madskill/move_t_lib
+
+    t_lib -> lib 
+
+  Change: bd66490aeb78e6cc690809c5e71f3c6cd2f1d1d2
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-10-08 22:35:02 +0000
+
+    t_lib -> lib 
+
+------------------------------------------
+version 0.025 at 2016-09-04 20:41:05 +0000
+------------------------------------------
+
+  Change: e4457600d0ec884df7b5edcfb0f1e065813e0435
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-09-04 23:41:05 +0000
+
+    Version 0.025 
 
   Change: 57b56cb8ab354080cd907b5049b82ad6df9cc7ba
   Author: Igor <igor-sverdlov@mail.ru>
@@ -119,5 +143,5 @@ version 0.022 at 2016-01-26 20:07:16 +0000
     fix typo 
 
 =================================================
-Plus 21 releases after 2015-09-05 00:00:00 +0000.
+Plus 21 releases after 2015-10-09 00:00:00 +0000.
 =================================================

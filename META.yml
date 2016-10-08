@@ -4,9 +4,10 @@ author:
   - 'Sergei Svistunov <sergei-svistunov@yandex.ru>'
 build_requires:
   FindBin: 0
+  QBit::Application: 0
   Test::Deep: 0
   Test::More: 0
-  TestWebInterface: 0
+  URI::Escape: 0
   lib: 0
 configure_requires:
   ExtUtils::MakeMaker: 0
@@ -32,4 +33,4 @@ requires:
   base: 0
   qbit: 0
   strict: 0
-version: 0.025
+version: 0.026
