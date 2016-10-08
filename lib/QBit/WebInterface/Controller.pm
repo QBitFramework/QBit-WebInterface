@@ -75,7 +75,7 @@ sub import {
     my $app_pkg = caller();
     die gettext('Use only in QBit::WebInterface and QBit::Application descendant')
       unless $app_pkg->isa('QBit::WebInterface')
-      && $app_pkg->isa('QBit::Application');
+          && $app_pkg->isa('QBit::Application');
 
     my $pkg_stash = package_stash($package);
 

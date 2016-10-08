@@ -1,7 +1,7 @@
 use FindBin qw($Bin);
 
 use lib "$Bin/../lib";
-use lib "$Bin/../t_lib";
+use lib "$Bin/lib";
 
 use Test::More;
 
