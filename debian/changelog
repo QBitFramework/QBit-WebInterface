@@ -1,3 +1,9 @@
+libqbit-webinterface-perl (0.027) raring; urgency=low
+
+  * added TestTimeLog
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Sun, 09 Oct 2016 23:14:01 +0300
+
 libqbit-webinterface-perl (0.026) raring; urgency=low
 
   * t_lib -> lib

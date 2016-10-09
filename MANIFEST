@@ -44,6 +44,7 @@ lib/QBit/templates/page.tt2
 t/basic.t
 t/lib/QBit/WebInterface/Test.pm
 t/lib/QBit/WebInterface/Test/Request.pm
+t/lib/TestTimeLog.pm
 t/lib/TestWebInterface.pm
 t/lib/TestWebInterface/Controller/Test.pm
 t/request.t
