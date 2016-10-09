@@ -10,6 +10,7 @@ __PACKAGE__->config_opts(
     TemplateIncludePaths => ['${ApplicationPath}../lib/QBit/templates', '${ApplicationPath}lib/templates']
     ,    # Use framework templates
     MinimizeTemplate => TRUE,
+    timelog_class    => 'TestTimeLog',
 );
 
 TRUE;
