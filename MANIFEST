@@ -13,6 +13,10 @@ debian/control
 debian/copyright
 debian/rules
 dist.ini
+lib/Exception/Form.pm
+lib/Exception/Request.pm
+lib/Exception/Request/UnknownMethod.pm
+lib/Exception/WebInterface/Controller/CSRF.pm
 lib/QBit/WebInterface.pm
 lib/QBit/WebInterface/Controller.pm
 lib/QBit/WebInterface/Controller/Form.pm

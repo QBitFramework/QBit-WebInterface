@@ -1,10 +1,34 @@
 ==================================================
-Changes from 2015-10-10 00:00:00 +0000 to present.
+Changes from 2015-12-21 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.027 at 2016-10-09 20:14:01 +0000
+version 0.028 at 2016-12-20 04:53:43 +0000
 ------------------------------------------
+
+  Change: 15d32d7e301811d9d16b6069bb62ea86c00f44ac
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2016-12-20 07:53:08 +0000
+
+    Merge pull request #24 from Madskill/exceptions
+
+    exceptions 
+
+  Change: 5417c1d77e682462aa420b1d397aee640a0f6109
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-12-20 07:48:57 +0000
+
+    exceptions 
+
+------------------------------------------
+version 0.027 at 2016-10-09 20:14:27 +0000
+------------------------------------------
+
+  Change: 5fcb8f55d979be86b57737cf662fa37024dc3a90
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2016-10-09 23:14:27 +0000
+
+    Version 0.027 
 
   Change: ed7067c681eb356a0cfbefeabfd80ab8f05aba29
   Author: Igor <igor-sverdlov@mail.ru>
@@ -167,5 +191,5 @@ version 0.022 at 2016-01-26 20:07:16 +0000
     fix typo 
 
 =================================================
-Plus 21 releases after 2015-10-10 00:00:00 +0000.
+Plus 21 releases after 2015-12-21 00:00:00 +0000.
 =================================================
