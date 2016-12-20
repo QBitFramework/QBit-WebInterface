@@ -4,7 +4,7 @@ use qbit;
 
 use base qw(QBit::WebInterface::Controller::Form::Field::input);
 
-eval {require Exception::Form};
+use Exception::Form;
 
 sub init {
     my ($self) = @_;

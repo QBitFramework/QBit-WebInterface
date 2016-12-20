@@ -1,11 +1,10 @@
-package Exception::WebInterface::Controller::CSRF;
-use base qw(Exception);
-
 package QBit::WebInterface::Controller;
 
 use qbit;
 
 use base qw(QBit::Application::Part);
+
+use Exception::WebInterface::Controller::CSRF;
 
 use Template 2.20;
 use Template::Config;

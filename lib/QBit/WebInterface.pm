@@ -6,7 +6,8 @@ use qbit;
 
 use QBit::WebInterface::Response;
 
-eval {require Exception::WebInterface::Controller::CSRF; require Exception::Request::UnknownMethod};
+use Exception::WebInterface::Controller::CSRF;
+use Exception::Request::UnknownMethod;
 
 sub request {
     my ($self, $request) = @_;
