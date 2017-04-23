@@ -218,7 +218,7 @@ sub _exception2html {
         $dtext =~ s/\\x\{([a-f0-9]{2,})\}/chr(hex($1))/ge;
         $dtext =~ s/;$//msg;
         $dtext =~ s/\n$//msg;
-        Encode::_utf8_on($dtext);
+        utf8::decode($dtext);
 
         return $dtext;
     };
