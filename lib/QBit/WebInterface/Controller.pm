@@ -1,11 +1,10 @@
-package Exception::WebInterface::Controller::CSRF;
-use base qw(Exception);
-
 package QBit::WebInterface::Controller;
 
 use qbit;
 
 use base qw(QBit::Application::Part);
+
+use Exception::WebInterface::Controller::CSRF;
 
 use Template 2.20;
 use Template::Config;
@@ -75,7 +74,7 @@ sub import {
     my $app_pkg = caller();
     die gettext('Use only in QBit::WebInterface and QBit::Application descendant')
       unless $app_pkg->isa('QBit::WebInterface')
-      && $app_pkg->isa('QBit::Application');
+          && $app_pkg->isa('QBit::Application');
 
     my $pkg_stash = package_stash($package);
 

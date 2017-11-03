@@ -33,12 +33,13 @@ my %WriteMakefileArgs = (
   },
   "TEST_REQUIRES" => {
     "FindBin" => 0,
+    "QBit::Application" => 0,
     "Test::Deep" => 0,
     "Test::More" => 0,
-    "TestWebInterface" => 0,
+    "URI::Escape" => 0,
     "lib" => 0
   },
-  "VERSION" => "0.025",
+  "VERSION" => "0.029",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -53,6 +54,7 @@ my %FallbackPrereqs = (
   "FindBin" => 0,
   "LWP::UserAgent" => 0,
   "POSIX" => 0,
+  "QBit::Application" => 0,
   "QBit::Application::Part" => 0,
   "QBit::Class" => 0,
   "Template" => "2.20",
@@ -60,7 +62,7 @@ my %FallbackPrereqs = (
   "Template::Provider" => 0,
   "Test::Deep" => 0,
   "Test::More" => 0,
-  "TestWebInterface" => 0,
+  "URI::Escape" => 0,
   "base" => 0,
   "lib" => 0,
   "qbit" => 0,

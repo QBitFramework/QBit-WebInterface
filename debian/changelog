@@ -1,3 +1,27 @@
+libqbit-webinterface-perl (0.029) raring; urgency=low
+ 
+  * fix dumper
+ 
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Sun, 23 Apr 2017 17:02:29 +0300
+
+libqbit-webinterface-perl (0.028) raring; urgency=low
+
+  * exceptions
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Tue, 20 Dec 2016 07:53:44 +0300
+
+libqbit-webinterface-perl (0.027) raring; urgency=low
+
+  * added TestTimeLog
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Sun, 09 Oct 2016 23:14:01 +0300
+
+libqbit-webinterface-perl (0.026) raring; urgency=low
+
+  * t_lib -> lib
+
+ -- Igor Sverdlov <igor-sverdlov@mail.ru>  Sat, 08 Oct 2016 22:39:00 +0300
+
 libqbit-webinterface-perl (0.025) raring; urgency=low
 
   * upload to cpan

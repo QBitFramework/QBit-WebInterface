@@ -4,7 +4,7 @@ use qbit;
 
 use base qw(QBit::Class);
 
-eval {require Exception::Form};
+use Exception::Form;
 
 __PACKAGE__->mk_accessors(qw(form name value));
 __PACKAGE__->abstract_methods(qw(control_html));

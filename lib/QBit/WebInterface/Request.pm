@@ -1,14 +1,11 @@
-package Exception::Request;
-use base qw(Exception);
-
-package Exception::Request::UnknownMethod;
-use base qw(Exception::Request);
-
 package QBit::WebInterface::Request;
 
 use qbit;
 
 use base qw(QBit::Class);
+
+use Exception::Request;
+use Exception::Request::UnknownMethod;
 
 __PACKAGE__->abstract_methods(
     qw(

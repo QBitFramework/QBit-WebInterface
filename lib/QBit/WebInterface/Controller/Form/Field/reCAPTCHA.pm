@@ -6,7 +6,7 @@ use base qw(QBit::WebInterface::Controller::Form::Field);
 
 use LWP::UserAgent;
 
-eval {require Exception::Form};
+use Exception::Form;
 
 sub init {
     my ($self) = @_;

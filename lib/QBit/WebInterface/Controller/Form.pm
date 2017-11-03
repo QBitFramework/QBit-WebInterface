@@ -1,13 +1,11 @@
-package Exception::Form;
-use base qw(Exception);
-
 package QBit::WebInterface::Controller::Form;
 
 use qbit;
 
 use base qw(QBit::Class);
 
-eval {require Exception::WebInterface::Controller::CSRF;};
+use Exception::Form;
+use Exception::WebInterface::Controller::CSRF;
 
 __PACKAGE__->mk_ro_accessors(qw(controller));
 

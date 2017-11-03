@@ -13,6 +13,10 @@ debian/control
 debian/copyright
 debian/rules
 dist.ini
+lib/Exception/Form.pm
+lib/Exception/Request.pm
+lib/Exception/Request/UnknownMethod.pm
+lib/Exception/WebInterface/Controller/CSRF.pm
 lib/QBit/WebInterface.pm
 lib/QBit/WebInterface/Controller.pm
 lib/QBit/WebInterface/Controller/Form.pm
@@ -42,9 +46,10 @@ lib/QBit/templates/common.tt2
 lib/QBit/templates/form.tt2
 lib/QBit/templates/page.tt2
 t/basic.t
+t/lib/QBit/WebInterface/Test.pm
+t/lib/QBit/WebInterface/Test/Request.pm
+t/lib/TestTimeLog.pm
+t/lib/TestWebInterface.pm
+t/lib/TestWebInterface/Controller/Test.pm
 t/request.t
-t_lib/QBit/WebInterface/Test.pm
-t_lib/QBit/WebInterface/Test/Request.pm
-t_lib/TestWebInterface.pm
-t_lib/TestWebInterface/Controller/Test.pm
-t_lib/templates/cmd1.tt2
+t/templates/cmd1.tt2
