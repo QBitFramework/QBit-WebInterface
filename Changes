@@ -3,8 +3,32 @@ Changes from 2017-11-05 00:00:00 +0000 to present.
 ==================================================
 
 ------------------------------------------
-version 0.032 at 2018-11-05 18:17:12 +0000
+version 0.033 at 2018-11-05 20:40:34 +0000
 ------------------------------------------
+
+  Change: 8ea847f76cd5b42b7b94e6bc992fe6d05480b52e
+  Author: Igor <igor-sverdlov@mail.ru>
+  Date : 2018-11-05 23:39:42 +0000
+
+    Merge pull request #29 from Madskill/fix_attributes
+
+    use $package 
+
+  Change: b92d1eafc8f1fd3f3d65876296638582c61206b7
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2018-11-05 23:38:10 +0000
+
+    use $package 
+
+------------------------------------------
+version 0.032 at 2018-11-05 18:17:28 +0000
+------------------------------------------
+
+  Change: 2d8601e792759af28493ffff2daa84f39a72fa6a
+  Author: Igor Sverdlov <igor-sverdlov@mail.ru>
+  Date : 2018-11-05 21:17:28 +0000
+
+    Version 0.032 
 
   Change: 2539f3e7ee18a5adfb0d9c0a48c1f8be0e8324d7
   Author: Igor <igor-sverdlov@mail.ru>

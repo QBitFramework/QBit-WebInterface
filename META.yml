@@ -36,5 +36,5 @@ requires:
   base: '0'
   qbit: '0'
   strict: '0'
-version: '0.032'
+version: '0.033'
 x_serialization_backend: 'YAML::Tiny version 1.70'
