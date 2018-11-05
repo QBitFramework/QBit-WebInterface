@@ -24,7 +24,7 @@ sub MODIFY_CODE_ATTRIBUTES {
     my @unknown_attrs = ();
     my $cmd           = {};
     foreach my $attr (@attrs) {
-        unless (_process_attribute($attr, $cmd)) {
+        unless ($package->_process_attribute($attr, $cmd)) {
             push(@unknown_attrs, $attr);
         }
     }
@@ -47,7 +47,7 @@ sub MODIFY_CODE_ATTRIBUTES {
 }
 
 sub _process_attribute {
-    my ($attr, $cmd) = @_;
+    my ($package, $attr, $cmd) = @_;
 
     my $result = TRUE;
     if ($attr =~ /^CMD$/) {
