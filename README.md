@@ -8,7 +8,7 @@ Web interface for QBit application.
 #### Install:
 
 ```
-apt-get install libqbit-webinterface-perl
+cpanm QBit::WebInterface
 ```
 
 #### Require:
