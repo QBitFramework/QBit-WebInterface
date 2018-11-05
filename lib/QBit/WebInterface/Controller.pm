@@ -12,6 +12,7 @@ use Digest::MD5 qw(md5_hex);
 
 use QBit::WebInterface::Controller::Form;
 
+our %TEMPLATE_OPTIONS;
 our %TEMPLATE_PRE_DEFINE;
 
 __PACKAGE__->mk_ro_accessors(qw(path attrs));
@@ -360,6 +361,7 @@ sub _process_template {
         },
         PRE_PROCESS  => $opts{'pre_process'},
         POST_PROCESS => $opts{'post_process'},
+        %TEMPLATE_OPTIONS,
     ) || throw $Template::ERROR;
 
     $self->timelog->finish();
