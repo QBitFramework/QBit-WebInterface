@@ -376,8 +376,8 @@ cmp_deeply(
             'attrs'          => ['FORMCMD', 'SAFE'],
             'route_path'     => {
                 'handler' => ignore(),
-                'path'    => '__HANDLER_1__',
-                'cmd'     => '__HANDLER_1__'
+                'path'    => '__HANDLER_PATH_1__',
+                'cmd'     => '__HANDLER_CMD_1__'
             },
             'levels'     => 3,
             'methods'    => 5,
@@ -1195,7 +1195,7 @@ cmp_deeply(
 
 my $sign =
   md5_hex(
-    $wi->get_option('salt', '') . int(name2date('today', oformat => 'sec') / 86400) . '__HANDLER_1__/__HANDLER_1__');
+    $wi->get_option('salt', '') . int(name2date('today', oformat => 'sec') / 86400) . '__HANDLER_PATH_1__/__HANDLER_CMD_1__');
 
 $wi->request(
     $wi->get_request(
@@ -1211,8 +1211,8 @@ cmp_deeply(
         'args'       => {'id' => '215'},
         'route_path' => {
             'handler' => ignore(),
-            'path'    => '__HANDLER_1__',
-            'cmd'     => '__HANDLER_1__'
+            'path'    => '__HANDLER_PATH_1__',
+            'cmd'     => '__HANDLER_CMD_1__'
         },
         'pattern'        => '\\A\\/user\\/fio\\/([^\\/.]+)\\z',
         'format'         => '/user/fio/%s',
@@ -1224,8 +1224,8 @@ cmp_deeply(
         'process_method' => '_process_form',
         'type'           => 'FORM',
         'levels'         => 3,
-        'path'           => '__HANDLER_1__',
-        'cmd'            => '__HANDLER_1__',
+        'path'           => '__HANDLER_PATH_1__',
+        'cmd'            => '__HANDLER_CMD_1__',
     },
     "GET \"/user/fio/215?sign=$sign\""
 );
@@ -1566,8 +1566,8 @@ cmp_deeply(
             'methods'    => 1,
             'pattern'    => '\\A\\/data\\/file\\.css\\/\\z',
             'route_path' => {
-                'cmd'     => '__HANDLER_2__',
-                'path'    => '__HANDLER_2__',
+                'cmd'     => '__HANDLER_CMD_2__',
+                'path'    => '__HANDLER_PATH_2__',
                 'handler' => ignore()
             },
             'params'     => [],

@@ -294,8 +294,8 @@ sub to {
 
             $HANDLER_ROUTES_COUNT++;
             $route_path = {
-                path    => "__HANDLER_${HANDLER_ROUTES_COUNT}__",
-                cmd     => "__HANDLER_${HANDLER_ROUTES_COUNT}__",
+                path    => "__HANDLER_PATH_${HANDLER_ROUTES_COUNT}__",
+                cmd     => "__HANDLER_CMD_${HANDLER_ROUTES_COUNT}__",
                 handler => $args[0]
             };
         } else {

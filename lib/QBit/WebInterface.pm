@@ -480,10 +480,6 @@ https://github.com/QBitFramework/QBit-WebInterface
 
 cpanm QBit::WebInterface
 
-=item *
-
-apt-get install libqbit-webinterface-perl (http://perlhub.ru/)
-
 =back
 
 For more information. please, see code.

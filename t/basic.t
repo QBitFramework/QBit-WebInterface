@@ -25,10 +25,10 @@ $routing->post('/formcmd2/!field!')->to(
 cmp_deeply(
     $wi->get_cmds(),
     {
-        '__HANDLER_1__' => {
-            '__HANDLER_1__' => {
+        '__HANDLER_PATH_1__' => {
+            '__HANDLER_CMD_1__' => {
                 'sub'        => ignore(),
-                'sub_name'   => '__HANDLER_1__',
+                'sub_name'   => '__HANDLER_CMD_1__',
                 'package'    => 'QBit::WebInterface::Controller',
                 'attributes' => {'CMD' => 1}
             }
